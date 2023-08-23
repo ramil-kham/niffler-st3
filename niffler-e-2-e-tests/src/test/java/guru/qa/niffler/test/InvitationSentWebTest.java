@@ -19,7 +19,7 @@ public class InvitationSentWebTest extends BaseWebTest {
 
     @Test
     @AllureId("102")
-    void checkDisplayingFriendData(@User(userType = User.UserType.INVITATION_SENT) UserJson userForTest) {
+    void checkDisplayingFriendData() {
         AllPeoplePage allPeoplePage = new AllPeoplePage();
         allPeoplePage.pendingInvitationStatusShouldBeVisible();
     }

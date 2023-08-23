@@ -5,10 +5,7 @@ import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.*;
-import wiremock.org.eclipse.jetty.util.ArrayQueue;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
@@ -17,15 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class UserQueueExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
 
-     /*
-    dima, barsik - friends
-    bee, anna - invitation send
-    valentin, pizzly - invitation received
-     */
-
     public static ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(UserQueueExtension.class);
-
-    //    private static Map<Queue<UserJson>, User.UserType> usersQueue = new ConcurrentHashMap<>();
     private static Map<User.UserType, Queue<UserJson>> usersQueue = new ConcurrentHashMap<>();
 
     static {
@@ -50,57 +39,29 @@ public class UserQueueExtension implements BeforeEachCallback, AfterTestExecutio
 
     @Override
     public void beforeEach(ExtensionContext context) {
-//        List<User> parameterAnnotation = new LinkedList<>();
-//        Map<User.UserType, UserJson> allCandidates = new HashMap<>();
-
         for (Method method : context.getRequiredTestClass().getDeclaredMethods()) {
             Parameter[] parameters = method.getParameters();
-//            if (method.isAnnotationPresent(BeforeEach.class)) {
             if (method.isAnnotationPresent(BeforeEach.class)
                     || method.isAnnotationPresent(Test.class)
-//                    && Arrays.stream(parameters).anyMatch(p -> p.isAnnotationPresent(User.class))
+                    && Arrays.stream(parameters).anyMatch(p -> p.isAnnotationPresent(User.class))
             ) {
-                getParameters(context, parameters);
-//                Parameter[] parameters = method.getParameters();
-//                for (int i = 0; i < parameters.length; i++) {
-//                    if (parameters[i].getType().isAssignableFrom(UserJson.class)) {
-//                        parameterAnnotation.add(parameters[i].getAnnotation(User.class));
-//                        User.UserType userType = parameterAnnotation.get(i).userType(); // назначаем userType для теста
-//                        Queue<UserJson> usersQueueByType = usersQueue.get(userType); // получаем по ключу тип userType для теста
-//                        UserJson candidateForTest = null;
-//                        while (candidateForTest == null) {
-//                            candidateForTest = usersQueueByType.poll();
-//                        }
-//                        candidateForTest.setUserType(userType);
-//                        allCandidates.put(userType, candidateForTest);
-//                    }
-//                }
-//                context.getStore(NAMESPACE).put(getAllureId(context), allCandidates);
-
+                for (int i = 0; i < parameters.length; i++) {
+                    if (parameters[i].getType().isAssignableFrom(UserJson.class)) {
+                        parameterAnnotation.add(parameters[i].getAnnotation(User.class));
+                        User.UserType userType = parameterAnnotation.get(i).userType(); // получаем userType из аннотации
+                        Queue<UserJson> usersQueueByType = usersQueue.get(userType); // пихаем в очередь userType из аннотации
+                        UserJson candidateForTest = null;
+                        while (candidateForTest == null) {
+                            candidateForTest = usersQueueByType.poll();
+                        }
+                        candidateForTest.setUserType(userType);
+                        allCandidates.put(userType, candidateForTest);
+                    }
+                }
+                context.getStore(NAMESPACE).put(getAllureId(context), allCandidates);
             }
-//            else if(method.isAnnotationPresent(Test.class)
-//                    && Arrays.stream(parameters).anyMatch(p -> p.isAnnotationPresent(User.class))) {
-//                getParameters(context, parameters);
-//            }
             break;
         }
-    }
-
-    void getParameters(ExtensionContext context, Parameter[] parameters) {
-            for (int i = 0; i < parameters.length; i++) {
-                if (parameters[i].getType().isAssignableFrom(UserJson.class)) {
-                    parameterAnnotation.add(parameters[i].getAnnotation(User.class));
-                    User.UserType userType = parameterAnnotation.get(i).userType(); // получаем userType из аннотации
-                    Queue<UserJson> usersQueueByType = usersQueue.get(userType); // пихаем в очередь userType из аннотации
-                    UserJson candidateForTest = null;
-                    while (candidateForTest == null) {
-                        candidateForTest = usersQueueByType.poll();
-                    }
-                    candidateForTest.setUserType(userType);
-                    allCandidates.put(userType, candidateForTest);
-                }
-            }
-            context.getStore(NAMESPACE).put(getAllureId(context), allCandidates);
     }
 
     @Override

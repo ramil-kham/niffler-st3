@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 public class InvitationReceivedWebTest extends BaseWebTest {
     @BeforeEach
-    void doLogin(@User(userType = User.UserType.INVITATION_RECEIVED) UserJson userForTest) throws InterruptedException {
+    void doLogin(@User(userType = User.UserType.INVITATION_RECEIVED) UserJson userForTest) {
         logIn(userForTest);
         MainPage mainPage= new MainPage();
         mainPage.clickNavigationItem("people");
