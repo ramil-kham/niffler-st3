@@ -5,8 +5,6 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.User;
 import guru.qa.niffler.jupiter.category.Category;
 import guru.qa.niffler.jupiter.spend.Spend;
-import guru.qa.niffler.jupiter.Spend;
-import guru.qa.niffler.jupiter.User;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
@@ -20,7 +18,6 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static guru.qa.niffler.jupiter.User.UserType.WITH_FRIENDS;
 
 @Disabled
 public class SpendingWebTest extends BaseWebTest {
