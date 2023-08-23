@@ -2,7 +2,6 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.jupiter.Spend;
 import guru.qa.niffler.jupiter.User;
 import guru.qa.niffler.jupiter.category.Category;
 import guru.qa.niffler.jupiter.spend.Spend;
@@ -11,7 +10,6 @@ import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.Allure;
 import io.qameta.allure.AllureId;
-import jdk.jfr.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
