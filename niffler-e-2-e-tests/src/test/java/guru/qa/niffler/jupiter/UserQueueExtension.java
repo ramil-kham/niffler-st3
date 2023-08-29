@@ -34,11 +34,10 @@ public class UserQueueExtension implements BeforeEachCallback, AfterTestExecutio
         usersQueue.put(User.UserType.INVITATION_RECEIVED, userInRc);
     }
 
-    List<User> parameterAnnotation = new LinkedList<>();
-    Map<User.UserType, UserJson> allCandidates = new HashMap<>();
-
     @Override
     public void beforeEach(ExtensionContext context) {
+        List<User> parameterAnnotation = new LinkedList<>();
+        Map<User.UserType, UserJson> allCandidates = new HashMap<>();
         for (Method method : context.getRequiredTestClass().getDeclaredMethods()) {
             Parameter[] parameters = method.getParameters();
             if (method.isAnnotationPresent(BeforeEach.class)
